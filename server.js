@@ -1,6 +1,5 @@
 var express = require('express');
 const { json } = require('body-parser');
-console.log(process.env.STRIPE_PUBLIC_KEY)
 var app = express();
 const multer = require('multer');
 var cors = require('cors')
@@ -61,17 +60,14 @@ const stripe = require('stripe')("sk_test_51Of4JlSHzjhUWugHHhm4A6eF2vroAzNZKzCG0
 function verifyToken(req, res, next) {
 
     const bearerheader = req.headers['authorization'];
-    console.log("req is here", req, bearerheader, req.headers)
     if (typeof (bearerheader) !== "undefined") {
 
         const bearer = bearerheader.split(" ");
         const token = bearer[1];
-        console.log(token);
         req.token = token;
         next();
     }
     else {
-        console.log("inside else verifytoken")
         res.send({
             message: "Invalid Token!"
         })
@@ -83,7 +79,6 @@ app.post('/checkoutsession', async (req, res) => {
 
     try {
         const { products } = req.body;
-        console.log(products);
 
         const lineitems = products?.map((item) => ({
             price_data: {
@@ -100,10 +95,9 @@ app.post('/checkoutsession', async (req, res) => {
             payment_method_types: ["card"],
             line_items: lineitems,
             mode: "payment",
-            success_url: "http://localhost:3000/success",
-            cancel_url: "http://localhost:3000",
+            success_url: "https://optimum-nutrition.vercel.app/success",
+            cancel_url: "https://optimum-nutrition.vercel.app",
         });
-        console.log("session=====", session);
         res.json({ id: session.id });
     } catch (error) {
         res.status(400).send(error);
@@ -115,14 +109,12 @@ app.post('/checkoutsession', async (req, res) => {
 app.get('/stripetransactionslist', async (req, res) => {
 
     const transactions = await stripe.issuing.transactions.list();
-    console.log(transactions);
     res.json(transactions);
 
 })
 
 app.post('/register', async (req, res) => {
     try {
-        console.log(req.body);
         let userfound = await userModel.findOne({ username: req.body.username });
         let registered;
         if (userfound == null) {
@@ -142,7 +134,6 @@ app.post('/register', async (req, res) => {
 
 app.post('/logincheck', async (req, res) => {
     try {
-        console.log(req.body);
         let { username, password } = req.body;
         let user = await userModel.findOne({ username: username });
         if (user != null) {
@@ -224,19 +215,15 @@ app.get('/allproducts', async (req, res) => {
 
 })
 app.get('/getproductdetails', verifyToken, async (req, res) => {
-    console.log(req.token);
     try {
         jwt.verify(req.token, SECRET_KEY, async (err, authdata) => {
             if (err) {
-                console.log(err);
                 res.status(400).send({ message: "Invalid Token", err: err });
             }
             else {
-                console.log(authdata);
                 let id = req.query.id;
                 let data = await productModel.find({ _id: id });
                 if (data) {
-                    console.log("data", data);
                     res.json(data);
                 }
 
@@ -318,8 +305,6 @@ app.post('/addcart', async (req, res) => {
         let cart = new cartModel();
         cart.user_id = user_id;
 
-        console.log(cart);
-
         let cart_items = new cartModel2();
 
         cart_items = {
@@ -338,7 +323,6 @@ app.post('/addcart', async (req, res) => {
 
         if (!cartData) {
             cart.cartItems.push(cart_items);
-            console.log(cart);
             cart.save();
             res.status(200).send({message:"Added to Cart!"})
         }
@@ -429,7 +413,6 @@ app.post('/newaddress', async (req, res) => {
     fulladdress.user_id = user_id;
 
     let addressitems = new addressDetailsModel();
-    console.log(addressitems);
     addressitems = addressdata;
     addressitems.address_id = address_id;
 
@@ -437,7 +420,6 @@ app.post('/newaddress', async (req, res) => {
 
     if (!storedaddress) {
         fulladdress.addresses.push(addressitems);
-        console.log(fulladdress);
         fulladdress.save();
     }
     else {
@@ -456,12 +438,10 @@ app.get('/alluseraddress', async (req, res) => {
 
 app.post('/changepassword', async (req, res) => {
     try {
-        console.log(req.body);
         let { user_id, current_password, new_password } = req.body;
         const user = await userModel.findOne({ _id: user_id });
         if (user.password == current_password) {
             const updateduser = await userModel.updateOne({ _id: user_id }, { password: new_password });
-            console.log(updateduser);
             res.json({ message: "Updated successfully!" });
         }
         else {
