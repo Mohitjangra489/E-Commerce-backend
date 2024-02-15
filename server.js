@@ -226,6 +226,10 @@ app.get('/getproductdetails', verifyToken, async (req, res) => {
                 if (data) {
                     res.json(data);
                 }
+                else
+                {
+                    res.status(404).send({message:"Not Found"});
+                }
 
             }
         })
