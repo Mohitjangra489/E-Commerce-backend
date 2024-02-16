@@ -118,7 +118,7 @@ app.post('/paymentsuccess', async (req, res) => {
       const session = await stripe.checkout.sessions.retrieve(session_id);
      const lineItems = await stripe.checkout.sessions.listLineItems(session_id);
 
-    console.log(session,lineitems);
+    console.log(session,lineItems);
 
     res.json(session);
 
