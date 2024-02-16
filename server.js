@@ -95,7 +95,7 @@ app.post('/checkoutsession', async (req, res) => {
             payment_method_types: ["card"],
             line_items: lineitems,
             mode: "payment",
-            success_url: "https://optimum-nutrition.vercel.app/success",
+            success_url: "https://optimum-nutrition.vercel.app/success?session_ID={CHECKOUT_SESSION_ID}",
             cancel_url: "https://optimum-nutrition.vercel.app",
         });
         res.json({ id: session.id });
