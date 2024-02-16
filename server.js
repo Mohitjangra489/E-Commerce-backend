@@ -102,6 +102,7 @@ app.post('/checkoutsession', async (req, res) => {
             client_reference_id:userId,
             metadata:{
                  address: JSON.stringify(shippingInfo),
+                products:JSON.stringify(lineitems)
                 }
         });
         res.json({ id: session.id });
