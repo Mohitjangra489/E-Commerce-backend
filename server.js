@@ -78,13 +78,15 @@ function verifyToken(req, res, next) {
 app.post('/checkoutsession', async (req, res) => {
 
     try {
-        const { products } = req.body;
+        const { products,shippingInfo,userId } = req.body;
 
         const lineitems = products?.map((item) => ({
             price_data: {
                 currency: "inr",
                 product_data: {
                     name: item.name,
+                    image:item.image,
+                    metadata:{productId:item.product_id}
                 },
                 unit_amount: item.price_per_piece * 100,
             },
@@ -97,6 +99,8 @@ app.post('/checkoutsession', async (req, res) => {
             mode: "payment",
             success_url: "https://optimum-nutrition.vercel.app/success?session_ID={CHECKOUT_SESSION_ID}",
             cancel_url: "https://optimum-nutrition.vercel.app",
+            client_reference_id:userId,
+            metadata:{shippingInfo}
         });
         res.json({ id: session.id });
     } catch (error) {
