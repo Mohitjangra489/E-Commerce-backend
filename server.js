@@ -97,7 +97,6 @@ app.post('/checkoutsession', async (req, res) => {
             payment_method_types: ["card"],
             line_items: lineitems,
             mode: "payment",
-            products:lineitems,
             success_url: "https://optimum-nutrition.vercel.app/success?session_ID={CHECKOUT_SESSION_ID}",
             cancel_url: "https://optimum-nutrition.vercel.app",
             client_reference_id:userId,
@@ -117,7 +116,9 @@ app.post('/paymentsuccess', async (req, res) => {
      const {session_id,user_id}=req.query;
     console.log(session_id,user_id,req.query);
       const session = await stripe.checkout.sessions.retrieve(session_id);
-    console.log(session);
+     const lineItems = await stripe.checkout.sessions.listLineItems(session_id);
+
+    console.log(session,lineitems);
 
     res.json(session);
 
