@@ -85,7 +85,7 @@ app.post('/checkoutsession', async (req, res) => {
                 currency: "inr",
                 product_data: {
                     name: item.name,
-                    image:item.image,
+                    images:[item.image],
                     metadata:{productId:item.product_id}
                 },
                 unit_amount: item.price_per_piece * 100,
