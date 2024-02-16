@@ -106,10 +106,13 @@ app.post('/checkoutsession', async (req, res) => {
 
 });
 
-app.get('/stripetransactionslist', async (req, res) => {
+app.post('/paymentsuccess', async (req, res) => {
+     const {session_id,user_id}=req.query;
+    console.log(session_id,user_id,req,query);
+      const session = await stripe.checkout.sessions.retrieve(session_id);
+    console.log(session);
 
-    const transactions = await stripe.issuing.transactions.list();
-    res.json(transactions);
+    res.json(session);
 
 })
 
