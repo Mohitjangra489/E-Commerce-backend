@@ -100,7 +100,9 @@ app.post('/checkoutsession', async (req, res) => {
             success_url: "https://optimum-nutrition.vercel.app/success?session_ID={CHECKOUT_SESSION_ID}",
             cancel_url: "https://optimum-nutrition.vercel.app",
             client_reference_id:userId,
-            metadata:{shippingInfo}
+            metadata:{
+                 address: JSON.stringify(shippingInfo),
+                }
         });
         res.json({ id: session.id });
     } catch (error) {
