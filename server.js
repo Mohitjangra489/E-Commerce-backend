@@ -131,6 +131,7 @@ app.post('/paymentsuccess', async (req, res) => {
         console.log("sessionAlreadyPresent=",sessionAlreadyPresent);
         if(!sessionAlreadyPresent){
              const session = await stripe.checkout.sessions.retrieve(session_id);
+            console.log(session,session?.name,session?.email);
              const allproductsdata = await stripe.checkout.sessions.listLineItems(session_id);
     
              const lineItems=allproductsdata.data;
@@ -144,6 +145,7 @@ app.post('/paymentsuccess', async (req, res) => {
            address:address,
            line_items:lineItems,
        }
+            console.log(orderdata);
 
      let neworder = new orderModel(orderdata);
         const orderdetails = await neworder.save();
