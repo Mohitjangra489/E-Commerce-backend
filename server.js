@@ -76,7 +76,19 @@ function verifyToken(req, res, next) {
     }
 }
 
-
+app.get('/userorders',async(req,res)=>{
+    const {userid}=req.query;
+    const data= await orderModel.find({user_id:userid});
+    res.json(data);
+    
+    try{
+        const data=await orderModel.find(
+    }
+    catch(error){
+          res.status(400).send(error);
+    }
+}
+    
 app.post('/checkoutsession', async (req, res) => {
 
     try {
