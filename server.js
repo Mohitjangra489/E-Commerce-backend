@@ -86,6 +86,17 @@ app.get('/userorders',async(req,res)=>{
           res.status(400).send(error);
     }
 });
+
+app.get('/allorders',async(req,res)=>{
+    try{
+          const data= await orderModel.find({});
+          res.json(data);
+    }
+    catch(error){
+          res.status(400).send(error);
+    }
+});
+
     
 app.post('/checkoutsession', async (req, res) => {
 
