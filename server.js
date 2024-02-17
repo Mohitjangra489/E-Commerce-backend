@@ -139,6 +139,10 @@ app.post('/paymentsuccess', async (req, res) => {
         const orderdetails = await neworder.save();
         res.json(orderdetails);
         }
+        else
+        {
+            res.status(200).send({message:"session already used"});
+        }
         
         
         
