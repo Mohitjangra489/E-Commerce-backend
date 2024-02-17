@@ -137,6 +137,8 @@ app.post('/paymentsuccess', async (req, res) => {
 
      let neworder = new orderModel(orderdata);
         const orderdetails = await neworder.save();
+            let cartdata = [];
+            let updatedcart = await cartModel.findOneAndUpdate({ user_id: user_id }, { cartItems: cartdata });
         res.json(orderdetails);
         }
         else
