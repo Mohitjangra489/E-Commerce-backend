@@ -117,7 +117,7 @@ app.post('/checkoutsession', async (req, res) => {
 app.post('/paymentsuccess', async (req, res) => {
     try{
          const {session_id,user_id}=req.query;
-        const sessionAlreadyPresent=orderModel.findOne({session_id:session_id});
+        const sessionAlreadyPresent= await orderModel.findOne({session_id:session_id});
         console.log("sessionAlreadyPresent=",sessionAlreadyPresent);
         if(!sessionAlreadyPresent){
              const session = await stripe.checkout.sessions.retrieve(session_id);
