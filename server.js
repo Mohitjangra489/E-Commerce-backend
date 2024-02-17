@@ -134,7 +134,7 @@ app.post('/paymentsuccess', async (req, res) => {
     console.log(session,lineItems);
 
     res.json({session:session,
-              allproductdata:allproductdata,
+              allproductdata:allproductsdata,
               lineItems:lineItems,
               order:orderdata
              });
