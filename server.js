@@ -53,7 +53,8 @@ const productModel = require('./backend/models/productModel');
 const cartModel = require('./backend/models/cartModel');
 const cartModel2 = require('./backend/models/cartModel2');
 const addressModel = require('./backend/models/address');
-const addressDetailsModel = require('./backend/models/addressModel')
+const addressDetailsModel = require('./backend/models/addressModel');
+const orderModel = require('./backend/models/orderModel');
 
 const stripe = require('stripe')("sk_test_51Of4JlSHzjhUWugHHhm4A6eF2vroAzNZKzCG0cBF9pnnsVe6dvWQA04aCYnK80BhJPotirs01fSTaUqqJlQnBSbs00a4lY8p61");
 
@@ -116,11 +117,26 @@ app.post('/paymentsuccess', async (req, res) => {
      const {session_id,user_id}=req.query;
     console.log(session_id,user_id,req.query);
       const session = await stripe.checkout.sessions.retrieve(session_id);
-     const lineItems = await stripe.checkout.sessions.listLineItems(session_id);
-
+     const allproductsdata = await stripe.checkout.sessions.listLineItems(session_id);
+    
+    const lineItems=allproductsdata.data;
+    const address=JSON.parse(session.metadata.address);
+       const orderdata={
+           session_id:session_id,
+           user_id:user_id,
+           subtotal:session.amount_total,
+           name:session.name,
+           email:session.email,
+           address:address,
+           line_items:lineItems,
+       }
     console.log(session,lineItems);
 
-    res.json(session);
+    res.json({session:session,
+              allproductdata:allproductdata,
+              lineItems:lineItems,
+              order:orderdata
+             });
 
 })
 
