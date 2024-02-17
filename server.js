@@ -140,8 +140,8 @@ app.post('/paymentsuccess', async (req, res) => {
            session_id:session_id,
            user_id:user_id,
            subtotal:session.amount_total,
-           name:session.name,
-           email:session.email,
+           name:session.customer_details.name,
+           email:session.customer_details.email,
            address:address,
            line_items:lineItems,
        }
