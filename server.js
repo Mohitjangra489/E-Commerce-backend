@@ -117,12 +117,15 @@ app.post('/checkoutsession', async (req, res) => {
 app.post('/paymentsuccess', async (req, res) => {
     try{
          const {session_id,user_id}=req.query;
-      const session = await stripe.checkout.sessions.retrieve(session_id);
-     const allproductsdata = await stripe.checkout.sessions.listLineItems(session_id);
+        const sessionAlreadyPresent=orderModel.findOne({session_id:session_id});
+        console.log("sessionAlreadyPresent=",sessionAlreadyPresent);
+        if(!sessionAlreadyPresent){
+             const session = await stripe.checkout.sessions.retrieve(session_id);
+             const allproductsdata = await stripe.checkout.sessions.listLineItems(session_id);
     
-    const lineItems=allproductsdata.data;
-    const address=JSON.parse(session.metadata.address);
-       const orderdata={
+             const lineItems=allproductsdata.data;
+             const address=JSON.parse(session.metadata.address);
+             const orderdata={
            session_id:session_id,
            user_id:user_id,
            subtotal:session.amount_total,
@@ -134,8 +137,12 @@ app.post('/paymentsuccess', async (req, res) => {
 
      let neworder = new orderModel(orderdata);
         const orderdetails = await neworder.save();
-        const expiresession = await stripe.checkout.sessions.expire(session_id);
         res.json(orderdetails);
+        }
+        
+        
+        
+     
     }
     catch(error){
         res.json(400).send(error);
