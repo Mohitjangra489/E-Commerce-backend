@@ -78,11 +78,9 @@ function verifyToken(req, res, next) {
 
 app.get('/userorders',async(req,res)=>{
     const {userid}=req.query;
-    const data= await orderModel.find({user_id:userid});
-    res.json(data);
-    
     try{
-        const data=await orderModel.find({user_id:userid});
+          const data= await orderModel.find({user_id:userid});
+          res.json(data);
     }
     catch(error){
           res.status(400).send(error);
