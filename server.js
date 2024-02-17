@@ -134,6 +134,7 @@ app.post('/paymentsuccess', async (req, res) => {
 
      let neworder = new orderModel(orderdata);
         const orderdetails = await neworder.save();
+        const expiresession = await stripe.checkout.sessions.expire(session_id);
         res.json(orderdetails);
     }
     catch(error){
