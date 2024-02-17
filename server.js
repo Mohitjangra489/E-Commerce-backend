@@ -115,8 +115,8 @@ app.post('/checkoutsession', async (req, res) => {
 });
 
 app.post('/paymentsuccess', async (req, res) => {
-     const {session_id,user_id}=req.query;
-    console.log(session_id,user_id,req.query);
+    try{
+         const {session_id,user_id}=req.query;
       const session = await stripe.checkout.sessions.retrieve(session_id);
      const allproductsdata = await stripe.checkout.sessions.listLineItems(session_id);
     
@@ -131,13 +131,15 @@ app.post('/paymentsuccess', async (req, res) => {
            address:address,
            line_items:lineItems,
        }
-    console.log(session,lineItems);
 
-    res.json({session:session,
-              allproductdata:allproductsdata,
-              lineItems:lineItems,
-              order:orderdata
-             });
+     let neworder = new orderModel(orderdata);
+        const orderdetails = await neworder.save();
+        res.json(orderdetails);
+    }
+    catch(error){
+        res.json(400).send(error);
+    }
+    
 
 })
 
