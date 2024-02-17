@@ -85,7 +85,7 @@ app.get('/userorders',async(req,res)=>{
     catch(error){
           res.status(400).send(error);
     }
-}
+});
     
 app.post('/checkoutsession', async (req, res) => {
 
