@@ -54,7 +54,8 @@ const cartModel = require('./backend/models/cartModel');
 const cartModel2 = require('./backend/models/cartModel2');
 const addressModel = require('./backend/models/address');
 const addressDetailsModel = require('./backend/models/addressModel');
-const orderModel = require('./backend/models/order');
+const orderModel = require('./backend/models/orders');
+
 
 const stripe = require('stripe')("sk_test_51Of4JlSHzjhUWugHHhm4A6eF2vroAzNZKzCG0cBF9pnnsVe6dvWQA04aCYnK80BhJPotirs01fSTaUqqJlQnBSbs00a4lY8p61");
 
