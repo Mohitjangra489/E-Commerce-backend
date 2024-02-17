@@ -82,7 +82,7 @@ app.get('/userorders',async(req,res)=>{
     res.json(data);
     
     try{
-        const data=await orderModel.find(
+        const data=await orderModel.find({user_id:userid});
     }
     catch(error){
           res.status(400).send(error);
